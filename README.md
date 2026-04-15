@@ -1,16 +1,17 @@
-```md
 # Smart Expense Tracker – Backend (Spring Boot)
 
-This is the Spring Boot backend for my Smart Expense Tracker project.  
-It exposes REST APIs for managing expenses and computing monthly totals.
+The REST API backend for ExpenseIQ, a full-stack personal finance tracker. Built with Spring Boot and Java 21, it handles expense management, budget tracking, and spending analytics.
 
 ## Features
 
-- Create, read, update and delete expenses
-- Filter expenses by **date range**
-- Compute **monthly total** for a given year and month
-- CORS enabled so the React frontend can call the API
-- Uses an in-memory H2 database (easy to run locally)
+- Full **CRUD** for expenses with Bean Validation (`@NotBlank`, `@Positive`)
+- **Budget management** — set and track monthly spending limits per category
+- **Monthly stats** endpoint — returns last N months of spending, zero-filled for chart continuity
+- **Category summary** — spending breakdown by category for any given month
+- **Date range filtering** and monthly total aggregation
+- **Global exception handler** — clean JSON error responses for validation failures
+- **Persistent H2 database** — data survives server restarts
+- CORS enabled for local React frontend
 
 ## Tech Stack
 
@@ -18,12 +19,56 @@ It exposes REST APIs for managing expenses and computing monthly totals.
 - Spring Boot 3
 - Spring Web
 - Spring Data JPA
-- H2 Database
+- Spring Validation (Bean Validation)
+- H2 Database (file-based)
 - Maven
 
-## Main Endpoints
+## API Endpoints
 
-Base URL (local):
+Base URL: `http://localhost:9090/api`
 
-```text
-http://localhost:9090/api/expenses
+### Expenses
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/expenses` | Get all expenses |
+| `POST` | `/expenses` | Create a new expense |
+| `PUT` | `/expenses/{id}` | Update an expense |
+| `DELETE` | `/expenses/{id}` | Delete an expense |
+| `GET` | `/expenses/total-month?year=&month=` | Monthly spending total |
+| `GET` | `/expenses/category-summary?year=&month=` | Spending breakdown by category |
+| `GET` | `/expenses/monthly-stats?months=6` | Last N months of totals (zero-filled) |
+| `GET` | `/expenses/range?start=&end=` | Filter by date range |
+
+### Budgets
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/budgets` | Get all budgets |
+| `PUT` | `/budgets` | Create or update a budget (upsert by category) |
+| `DELETE` | `/budgets/{id}` | Remove a budget |
+
+## Running Locally
+
+```bash
+mvn spring-boot:run
+```
+
+Server starts on `http://localhost:9090`. H2 console available at `http://localhost:9090/h2-console`.
+
+## Project Structure
+
+```
+src/main/java/com/example/expense/
+ ├─ controller/
+ │   ├─ ExpenseController.java
+ │   ├─ BudgetController.java
+ │   └─ GlobalExceptionHandler.java
+ ├─ model/
+ │   ├─ Expense.java
+ │   ├─ Budget.java
+ │   └─ CategorySummary.java
+ └─ repository/
+     ├─ ExpenseRepository.java
+     └─ BudgetRepository.java
+```
