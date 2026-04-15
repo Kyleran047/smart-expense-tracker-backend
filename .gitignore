@@ -15,3 +15,6 @@ target/
 
 # Logs
 *.log
+
+# H2 file-based database
+data/

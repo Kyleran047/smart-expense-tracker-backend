@@ -17,4 +17,10 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     @Query("SELECT COALESCE(SUM(e.amount), 0) FROM Expense e " +
             "WHERE e.date BETWEEN :start AND :end")
     BigDecimal sumAmountByDateRange(LocalDate start, LocalDate end);
+
+    @Query("SELECT e.category, SUM(e.amount) FROM Expense e " +
+            "WHERE e.date BETWEEN :start AND :end " +
+            "GROUP BY e.category " +
+            "ORDER BY SUM(e.amount) DESC")
+    List<Object[]> categoryTotals(LocalDate start, LocalDate end);
 }

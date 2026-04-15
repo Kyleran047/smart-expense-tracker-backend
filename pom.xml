@@ -45,6 +45,12 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Bean Validation -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
         <!-- For JSON (already included via web starter, but fine) -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

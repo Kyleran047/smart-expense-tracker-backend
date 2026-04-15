@@ -1,6 +1,9 @@
 package com.example.expense.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -12,18 +15,22 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title; // e.g. "Groceries"
-    private String category; // e.g. "Food", "Rent", "Transport"
+    @NotBlank(message = "Title is required")
+    private String title;
 
+    @NotBlank(message = "Category is required")
+    private String category;
+
+    @NotNull(message = "Amount is required")
+    @Positive(message = "Amount must be positive")
     @Column(precision = 12, scale = 2)
     private BigDecimal amount;
 
-    private LocalDate date; // when the money was spent
+    private LocalDate date;
 
     private String notes;
 
-    public Expense() {
-    }
+    public Expense() {}
 
     public Expense(String title, String category, BigDecimal amount, LocalDate date, String notes) {
         this.title = title;
@@ -33,53 +40,21 @@ public class Expense {
         this.notes = notes;
     }
 
-    // --- Getters & setters ---
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 
-    public String getTitle() {
-        return title;
-    }
+    public BigDecimal getAmount() { return amount; }
+    public void setAmount(BigDecimal amount) { this.amount = amount; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public LocalDate getDate() { return date; }
+    public void setDate(LocalDate date) { this.date = date; }
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
+    public String getNotes() { return notes; }
+    public void setNotes(String notes) { this.notes = notes; }
 }
